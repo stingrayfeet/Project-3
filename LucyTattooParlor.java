@@ -1,16 +1,31 @@
 import java.util.Scanner;
 public class LucyTattooParlor {
-
+	
+	
+	/**
+	 * Computes minutes of work time for any given technician. Returns an int with the specified tech's minutes of work.
+	 * 
+	 * @param a
+	 * @return counter
+	 */
 	public static int computeMinutesOfWork (TattooCustomer[] a) {
-		int counter = 0;
+		int minutesOfWork = 0;
 		for (int i = 0; i < a.length; i++) {
 			if (a[i] != null) {
-				counter += a[i].getMinutes();
+				minutesOfWork += a[i].getMinutes();
 			}
 		}
-		return counter;
+		return minutesOfWork;
 	}
 
+	/** 
+	 * Adds a customer with name, tattoo, and estimated tattoo time to specified artist. Returns true if customer was added successfully, false if otherwise.
+	 * 
+	 * @param a
+	 * @param c
+	 * @param artistNum
+	 * @return boolean
+	 */
 	public static boolean addCustomer (TattooCustomer[][] a, TattooCustomer c, int artistNum) {
 		//checks if artist at index artistNum can take more clients, returns false if artist can NOT
 		if (computeMinutesOfWork(a[artistNum]) > 480) {
@@ -26,6 +41,13 @@ public class LucyTattooParlor {
 		return false;
 	}
 
+	/**
+	 * Adds a customer with name, tattoo, and estimated tattoo time to first available artist. Returns true if customer was added successfully, false if otherwise.
+	 * 
+	 * @param a
+	 * @param c 
+	 * @return boolean 
+	 */
 	public static boolean addCustomer (TattooCustomer[][] a, TattooCustomer c) {
 		int[] techsWithSlots = new int[a.length];
 		int slotNum = 0;
@@ -37,7 +59,6 @@ public class LucyTattooParlor {
 				}
 			}
 			if (hasNull == true) {
-				System.out.println("DEBUG: slotNum = " + slotNum);
 				techsWithSlots[slotNum] = i;
 				slotNum++;
 			}
@@ -116,6 +137,9 @@ public class LucyTattooParlor {
 				if (!success) {
 					System.out.println("-----Could not add customer, all slots are reserved for all artists-----");
 				}
+				else {
+					System.out.println("---Customer added successfully---");
+				}
 			}
 
 			else {
@@ -123,20 +147,15 @@ public class LucyTattooParlor {
 				if (!success) {
 					System.out.println("-----Could not add customer, all slots for this artist are reserved-----");
 				}
-			}
-
-
-			//DEBUG RUNS PARLOR 2D ARRAY
-			for (int i = 0; i < parlor.length; i++) {
-				for (int j = 0; j < parlor[i].length; j++) {
-					System.out.print(parlor[i][j] + " ");
+				else {
+					System.out.println("---Customer added successfully---");
 				}
-				System.out.println();
 			}
 
 
 		} while ($continue);
 
+		input.close();
 
 		for (int i = 0; i < parlor.length; i++) {
 			System.out.println("---Artist " + (i) + "---");
