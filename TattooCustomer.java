@@ -1,4 +1,8 @@
-
+/**
+ * 
+ * @author Wills Blake
+ *
+ */
 public class TattooCustomer {
 	//MEMBER VARIABLES --
 	private static int numCustomers;
@@ -24,7 +28,7 @@ public class TattooCustomer {
 		return tattoo;
 	}
 	
-	public int getMintues () {
+	public int getMinutes () {
 		return minutes;
 	}
 	
