@@ -1,4 +1,3 @@
-import java.lang.reflect.Array;
 import java.util.Scanner;
 public class LucyTattooParlor {
 
@@ -6,7 +5,7 @@ public class LucyTattooParlor {
 		int counter = 0;
 		for (int i = 0; i < a.length; i++) {
 			if (a[i] != null) {
-				counter += a[i].getMintues();
+				counter += a[i].getMinutes();
 			}
 		}
 		return counter;
@@ -28,27 +27,41 @@ public class LucyTattooParlor {
 	}
 
 	public static boolean addCustomer (TattooCustomer[][] a, TattooCustomer c) {
+		int[] techsWithSlots = new int[a.length];
+		int slotNum = 0;
+		boolean hasNull = false;
+		for(int i = 0; i < a.length; i++) {
+			for (int j = 0; j < a[i].length; j++) {
+				if (a[i][j] == null) {
+					hasNull = true;
+				}
+			}
+			if (hasNull == true) {
+				System.out.println("DEBUG: slotNum = " + slotNum);
+				techsWithSlots[slotNum] = i;
+				slotNum++;
+			}
+			hasNull = false;
+			
+		}
 		//instantiation of variables for addCustomer
 		int lowestMin = computeMinutesOfWork(a[0]);
 		int lowestArtist = 0;
 		int tempMinutes = 0;
 		//Compute minutes of work for each artist and assigns lowestArtist as artist with the least amount of work minutes
 		for (int i = 0; i < a.length; i++) {
-			tempMinutes += computeMinutesOfWork(a[i]);
+			tempMinutes = computeMinutesOfWork(a[i]);
 			if (tempMinutes < lowestMin) {
 				lowestMin = tempMinutes;
-				if (a[lowestArtist][a[lowestArtist].length - 1] == null) {
-				lowestArtist = i;
-				System.out.println("DEBUG: " + (i + 1) + " run of for loop-- lowestArtist = " + lowestArtist);
+				for (int value: techsWithSlots) {
+					if (techsWithSlots[value] == i && tempMinutes < 480) {
+						lowestArtist = i;
+					}
 				}
 			}
 			tempMinutes = 0;
 		}
 
-		//checks if TattooCustomer a at index lowestArtist can take more clients, returns false if artist can NOT
-		if (computeMinutesOfWork(a[lowestArtist]) > 480) {
-			return false;
-		}
 		//assigns TattooCustomer c to first null position found in a[lowestArtist], returns true if null position is found
 		for (int i = 0; i < a[lowestArtist].length; i++) {
 			if (a[lowestArtist][i] == null) {
@@ -67,25 +80,25 @@ public class LucyTattooParlor {
 		boolean $continue = true;
 		int numArtists;
 		int artistSlots;
-
 		System.out.println("--Lucy's Tattoo Parlor--");
 		System.out.println("How many artists will be working?");
-		numArtists = input.nextInt();
-		System.out.println("How many slots will the artists take?");
-		artistSlots = input.nextInt();
+		numArtists = Integer.parseInt(args[0]);
+		System.out.println("... " + numArtists + " technicians selected");
+		System.out.println("How many shifts will the artists take?");
+		artistSlots = Integer.parseInt(args[1]);
+		System.out.println("... " + artistSlots + " shifts per technician");
 
 		//creates artists and slots with 2d array of TattooCustomer objects 
 		TattooCustomer[][] parlor = new TattooCustomer[numArtists][artistSlots];
 
 		do {
-			input.nextLine();
 			//Begin while loop to use as menu
 			String name;
 			String tattoo;
 			int minutes;
 			String artistRequest;
 
-			System.out.println("Customer name: \n");
+			System.out.println("Customer name:");
 			name = input.nextLine();
 			if (name.equals("Print Waitlist")) {
 				break;
@@ -96,6 +109,7 @@ public class LucyTattooParlor {
 			artistRequest = input.next();
 			System.out.println("Minutes required: ");
 			minutes = input.nextInt();
+			input.nextLine();
 
 			if (artistRequest.equals("r")) {
 				boolean success = addCustomer(parlor, new TattooCustomer(name, tattoo, minutes));
@@ -112,7 +126,7 @@ public class LucyTattooParlor {
 			}
 
 
-			//DEBUG RUNS EMPTY PARLOR 2D ARRAY
+			//DEBUG RUNS PARLOR 2D ARRAY
 			for (int i = 0; i < parlor.length; i++) {
 				for (int j = 0; j < parlor[i].length; j++) {
 					System.out.print(parlor[i][j] + " ");
@@ -128,9 +142,9 @@ public class LucyTattooParlor {
 			System.out.println("---Artist " + (i) + "---");
 			for (int j = 0; j < parlor[i].length; j++) {
 				if (parlor[i][j] != null) {
-					System.out.print("-Time Slot " + (j + 1) + "-\nName: " + parlor[i][j].getName() + "\nTattoo: " + parlor[i][j].getTattoo() + "\nEstimated time: " + parlor[i][j].getMintues() + "\n\n");
+					System.out.print("-Time Slot " + (j + 1) + "-\nName: " + parlor[i][j].getName() + "\nTattoo: " + parlor[i][j].getTattoo() + "\nEstimated time: " + parlor[i][j].getMinutes() + "\n\n");
 				}
-				
+
 				else {
 					System.out.println("-Time Slot " + (j + 1) + "-\nN/A");
 				}
